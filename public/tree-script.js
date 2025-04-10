@@ -854,7 +854,7 @@ document.addEventListener('DOMContentLoaded', function() {
         dnskeyStatus.innerHTML = `
             <strong>KSK (Key Signing Key):</strong> ${domainInfo.dnskey.ksk}<br>
             <strong>ZSK (Zone Signing Key):</strong> ${domainInfo.dnskey.zsk}
-            <div class="key-box">
+            <div class="key-box scroll-box">
                 ${domain}. 3600 IN DNSKEY 257 3 8 (${domainInfo.dnskey.ksk.substring(4)})
             </div>
         `;
@@ -864,20 +864,32 @@ document.addEventListener('DOMContentLoaded', function() {
         dsStatus.className = 'component-status status-active';
         dsStatus.innerHTML = `
             <strong>DS Record Hash:</strong> Presente e válido
+            <div class="key-box scroll-box">
+                ${domain}. 3600 IN DS 12345 8 2 (${domainInfo.ds})
+            </div>
         `;
         
         // Update RRSIG component
         const rrsigStatus = document.getElementById('rrsig').querySelector('.component-status');
         rrsigStatus.className = 'component-status status-active';
         rrsigStatus.innerHTML = `
-            <strong>Estado:</strong> Presente e válido
+            <strong>Estado:</strong> Assinaturas válidas para todos os registros
+            <div class="signature-box scroll-box">
+                ${domain}. 3600 IN RRSIG A 8 3 3600 (
+                20230615000000 20230601000000
+                12345 ${domain}.
+                a1b2c3d4e5f6...)
+            </div>
         `;
         
         // Update NSEC component
         const nsecStatus = document.getElementById('nsec').querySelector('.component-status');
         nsecStatus.className = 'component-status status-active';
         nsecStatus.innerHTML = `
-            <strong>Tipo:</strong> Presente e válido (${domainInfo.nsec})
+            <strong>Tipo:</strong> ${domainInfo.nsec}
+            <div class="key-box scroll-box">
+                ${domain}. 3600 IN NSEC3 1 0 10 ab12cd ${domainInfo.nsec === 'NSEC3' ? 'H(próximo-domínio)' : 'próximo-domínio'} A NS MX RRSIG NSEC3
+            </div>
         `;
         
         // Update CDS component
@@ -885,6 +897,9 @@ document.addEventListener('DOMContentLoaded', function() {
         cdsStatus.className = 'component-status status-active';
         cdsStatus.innerHTML = `
             <strong>Estado:</strong> Presente e válido
+            <div class="key-box scroll-box">
+                ${domain}. 3600 IN CDS 12345 8 2 (${domainInfo.cds})
+            </div>
         `;
     }
     

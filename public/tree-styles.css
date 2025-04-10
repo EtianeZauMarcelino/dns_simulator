@@ -632,6 +632,12 @@ button:hover {
     overflow-x: auto;
 }
 
+.scroll-box {
+    white-space: nowrap;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
 @media (max-width: 768px) {
     .input-section {
         flex-direction: column;
