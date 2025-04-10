@@ -62,6 +62,27 @@ document.addEventListener('DOMContentLoaded', function() {
             'MX': 'mail.dns.pt',
             'NS': 'ns1.dns.pt',
             'DNSSEC': true
+        },
+        'pt.pt': {
+            'A': '193.136.2.229',
+            'AAAA': '2001:690:a00:4001::103',
+            'MX': 'mail.pt.pt',
+            'NS': 'ns1.pt.pt',
+            'DNSSEC': true
+        },
+        'youtube.com': {
+            'A': '142.250.190.142',
+            'AAAA': '2a00:1450:4001:830::200e',
+            'MX': 'mail.youtube.com',
+            'NS': 'ns1.youtube.com',
+            'DNSSEC': true
+        },
+        'chrome.pt': {
+            'A': '142.251.36.142',
+            'AAAA': '2a00:1450:4001:831::200e',
+            'MX': 'mail.chrome.pt',
+            'NS': 'ns1.chrome.pt',
+            'DNSSEC': true
         }
     };
     
@@ -73,35 +94,68 @@ document.addEventListener('DOMContentLoaded', function() {
         'exemplo2.pt': {
             enabled: true,
             dnskey: {
-                ksk: 'KSK-1234 RSA 2048 bits',
-                zsk: 'ZSK-5678 RSA 1024 bits'
+                ksk: 'KSK-23456 RSA 2048 bits',
+                zsk: 'ZSK-23456 RSA 1024 bits'
             },
-            ds: 'SHA-256 43FD1B BC382B 9C1E7F 4809AF 8298A9 8ED63F F3',
+            ds: 'SHA-256 23456 8 2 B4C9D8EF3217A65D40F792BA1A0B7C3F82E95D6F41C8E9B3217D6F30A5C8B4E9',
             rrsig: true,
             nsec: 'NSEC3',
-            cds: 'Presente e válido'
+            cds: '23456 8 2 B4C9D8EF3217A65D40F792BA1A0B7C3F82E95D6F41C8E9B3217D6F30A5C8B4E9'
         },
         'google.pt': {
             enabled: true,
             dnskey: {
-                ksk: 'KSK-9876 RSA 2048 bits',
-                zsk: 'ZSK-5432 RSA 1024 bits'
+                ksk: 'KSK-19036 RSA 2048 bits',
+                zsk: 'ZSK-19036 RSA 1024 bits'
             },
-            ds: 'SHA-256 12AB3C 4D56E7 890F123 456789 ABCDEF 123456 789',
+            ds: 'SHA-256 19036 8 2 DE0F1887AC2CE6CAD1036A8F222F6F84D1C8C544B5C4A7FB0DB164E2511D7C61',
             rrsig: true,
             nsec: 'NSEC3',
-            cds: 'Presente e válido'
+            cds: '19036 8 2 DE0F1887AC2CE6CAD1036A8F222F6F84D1C8C544B5C4A7FB0DB164E2511D7C61'
         },
         'dns.pt': {
             enabled: true,
             dnskey: {
-                ksk: 'KSK-7654 RSA 4096 bits',
-                zsk: 'ZSK-3210 RSA 2048 bits'
+                ksk: 'KSK-41900 RSA 4096 bits',
+                zsk: 'ZSK-41900 RSA 2048 bits'
             },
-            ds: 'SHA-256 9876AB 543C21 DEF098 765432 109876 543210 ABC',
+            ds: 'SHA-256 41900 8 2 34681AD8F5A6E2C8C7D2BAC70D62860954DB8A5F94BB7CA824E0088FA09BDEC9',
             rrsig: true,
             nsec: 'NSEC3',
-            cds: 'Presente e válido'
+            cds: '41900 8 2 34681AD8F5A6E2C8C7D2BAC70D62860954DB8A5F94BB7CA824E0088FA09BDEC9'
+        },
+        'pt.pt': {
+            enabled: true,
+            dnskey: {
+                ksk: 'KSK-31777 RSA 4096 bits',
+                zsk: 'ZSK-31777 RSA 2048 bits'
+            },
+            ds: 'SHA-256 31777 8 2 A16CCD7D608BD993631B0E3DCD85A4D3AC041A9539774C39F28F4C67B38DB8CF',
+            rrsig: true,
+            nsec: 'NSEC3',
+            cds: '31777 8 2 A16CCD7D608BD993631B0E3DCD85A4D3AC041A9539774C39F28F4C67B38DB8CF'
+        },
+        'youtube.com': {
+            enabled: true,
+            dnskey: {
+                ksk: 'KSK-56090 RSA 2048 bits',
+                zsk: 'ZSK-56090 RSA 1024 bits'
+            },
+            ds: 'SHA-256 56090 8 2 5886F6DF971BC5534FC7CB4E024485A31C1F13B2241B81F0FF7D93C9CF2F347E',
+            rrsig: true,
+            nsec: 'NSEC3',
+            cds: '56090 8 2 5886F6DF971BC5534FC7CB4E024485A31C1F13B2241B81F0FF7D93C9CF2F347E'
+        },
+        'chrome.pt': {
+            enabled: true,
+            dnskey: {
+                ksk: 'KSK-2371 RSA 2048 bits',
+                zsk: 'ZSK-2371 RSA 1024 bits'
+            },
+            ds: 'SHA-256 C4877C1EA218D4A54C51FF25F318D70D3FC7F653555F4D53EC29F24312D70F25',
+            rrsig: true,
+            nsec: 'NSEC3',
+            cds: '2371 13 2 C4877C1EA218D4A54C51FF25F318D70D3FC7F653555F4D53EC29F24312D70F25'
         }
     };
     
@@ -809,43 +863,28 @@ document.addEventListener('DOMContentLoaded', function() {
         const dsStatus = document.getElementById('ds').querySelector('.component-status');
         dsStatus.className = 'component-status status-active';
         dsStatus.innerHTML = `
-            <strong>DS Record Hash:</strong> ${domainInfo.ds}
-            <div class="key-box">
-                ${domain}. 3600 IN DS 12345 8 2 (${domainInfo.ds})
-            </div>
+            <strong>DS Record Hash:</strong> Presente e válido
         `;
         
         // Update RRSIG component
         const rrsigStatus = document.getElementById('rrsig').querySelector('.component-status');
         rrsigStatus.className = 'component-status status-active';
         rrsigStatus.innerHTML = `
-            <strong>Estado:</strong> Assinaturas válidas para todos os registros
-            <div class="signature-box">
-                ${domain}. 3600 IN RRSIG A 8 3 3600 (
-                20230615000000 20230601000000
-                12345 ${domain}.
-                a1b2c3d4e5f6...)
-            </div>
+            <strong>Estado:</strong> Presente e válido
         `;
         
         // Update NSEC component
         const nsecStatus = document.getElementById('nsec').querySelector('.component-status');
         nsecStatus.className = 'component-status status-active';
         nsecStatus.innerHTML = `
-            <strong>Tipo:</strong> ${domainInfo.nsec}
-            <div class="key-box">
-                ${domain}. 3600 IN NSEC3 1 0 10 ab12cd ${domainInfo.nsec === 'NSEC3' ? 'H(próximo-domínio)' : 'próximo-domínio'} A NS MX RRSIG NSEC3
-            </div>
+            <strong>Tipo:</strong> Presente e válido (${domainInfo.nsec})
         `;
         
         // Update CDS component
         const cdsStatus = document.getElementById('cds').querySelector('.component-status');
         cdsStatus.className = 'component-status status-active';
         cdsStatus.innerHTML = `
-            <strong>Estado:</strong> ${domainInfo.cds}
-            <div class="key-box">
-                ${domain}. 3600 IN CDS 12345 8 2 (${domainInfo.ds})
-            </div>
+            <strong>Estado:</strong> Presente e válido
         `;
     }
     

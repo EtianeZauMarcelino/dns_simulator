@@ -37,6 +37,24 @@ document.addEventListener('DOMContentLoaded', function() {
             'AAAA': '2001:690:a80:4001::1',
             'MX': 'mail.dns.pt',
             'NS': 'ns1.dns.pt'
+        },
+        'pt.pt': {
+            'A': '193.136.2.229',
+            'AAAA': '2001:690:a00:4001::103',
+            'MX': 'mail.pt.pt',
+            'NS': 'ns1.pt.pt'
+        },
+        'youtube.com': {
+            'A': '142.250.190.142',
+            'AAAA': '2a00:1450:4001:830::200e',
+            'MX': 'mail.youtube.com',
+            'NS': 'ns1.youtube.com'
+        },
+        'chrome.pt': {
+            'A': '142.251.36.142',
+            'AAAA': '2a00:1450:4001:831::200e',
+            'MX': 'mail.chrome.pt',
+            'NS': 'ns1.chrome.pt'
         }
     };
     
