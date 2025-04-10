@@ -170,93 +170,84 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Step 8: Authoritative DNS server responds with IP
-        const hasRecord = dnsRecords[domain] !== undefined;
-        if (hasRecord) {
-            const ip = dnsRecords[domain]['A'];
-            steps.push({
-                action: 'authoritative-response',
-                description: `Authoritative DNS server responds with IP address: ${ip}`,
-                elements: ['authoritative', 'resolver'],
-                logMessage: `Authoritative DNS server: "${domain} resolves to ${ip}"`,
-                logType: 'response',
-                ip: ip
-            });
-            
-            // Step 9: Resolver updates cache
-            steps.push({
-                action: 'resolver-update-cache',
-                description: `Resolver updates cache with ${domain} → ${ip}`,
-                elements: ['resolver'],
-                logMessage: `Resolver caches: ${domain} → ${ip}`,
-                logType: 'info',
-                domain: domain,
-                ip: ip
-            });
-            
-            // Step 10: Resolver returns IP to browser
-            steps.push({
-                action: 'resolver-to-browser',
-                description: `Resolver returns IP address to browser: ${ip}`,
-                elements: ['resolver', 'browser'],
-                logMessage: `Resolver to browser: "${domain} resolves to ${ip}"`,
-                logType: 'response',
-                ip: ip
-            });
-            
-            // Step 11: Browser initiates HTTP request
-            steps.push({
-                action: 'browser-to-webserver',
-                description: `Browser initiates HTTP request to ${ip}`,
-                elements: ['browser', 'webserver'],
-                logMessage: `Browser sends HTTP request to ${ip}`,
-                logType: 'request'
-            });
-            
-            // Step 12: Web server responds
-            steps.push({
-                action: 'webserver-response',
-                description: `Web server responds with HTTP content`,
-                elements: ['webserver', 'browser'],
-                logMessage: `Web server responds with HTTP content`,
-                logType: 'response'
-            });
-            
-            // Step 13: Browser renders page
-            steps.push({
-                action: 'browser-render',
-                description: `Browser renders the web page`,
-                elements: ['browser'],
-                logMessage: `Browser renders the web page from ${domain}`,
-                logType: 'info'
-            });
+        // Perform a real DNS lookup using server-side DNS
+        let ip;
+        const dnsRequest = new XMLHttpRequest();
+        dnsRequest.open('GET', `/dns-lookup?domain=${domain}`, false); // Synchronous request
+        dnsRequest.send();
+        
+        if (dnsRequest.status === 200) {
+            try {
+                const response = JSON.parse(dnsRequest.responseText);
+                if (response.ip) {
+                    ip = response.ip;
+                } else {
+                    throw new Error("No IP in response");
+                }
+            } catch (e) {
+                console.error("Error parsing DNS lookup response:", e);
+                ip = "0.0.0.0";
+            }
         } else {
-            // Handle domain not found
-            steps.push({
-                action: 'authoritative-nxdomain',
-                description: `Authoritative DNS server responds with NXDOMAIN (domain does not exist)`,
-                elements: ['authoritative', 'resolver'],
-                logMessage: `Authoritative DNS server: "NXDOMAIN - ${domain} does not exist"`,
-                logType: 'error'
-            });
-            
-            // Resolver returns error to browser
-            steps.push({
-                action: 'resolver-error-to-browser',
-                description: `Resolver returns NXDOMAIN error to browser`,
-                elements: ['resolver', 'browser'],
-                logMessage: `Resolver to browser: "NXDOMAIN - ${domain} does not exist"`,
-                logType: 'error'
-            });
-            
-            // Browser displays error
-            steps.push({
-                action: 'browser-error',
-                description: `Browser displays "DNS resolution failed" error`,
-                elements: ['browser'],
-                logMessage: `Browser: "DNS resolution failed for ${domain}"`,
-                logType: 'error'
-            });
+            ip = "0.0.0.0";
         }
+        
+        steps.push({
+            action: 'authoritative-response',
+            description: `Authoritative DNS server responds with IP address: ${ip}`,
+            elements: ['authoritative', 'resolver'],
+            logMessage: `Authoritative DNS server: "${domain} resolves to ${ip}"`,
+            logType: 'response',
+            ip: ip
+        });
+        
+        // Step 9: Resolver updates cache
+        steps.push({
+            action: 'resolver-update-cache',
+            description: `Resolver updates cache with ${domain} → ${ip}`,
+            elements: ['resolver'],
+            logMessage: `Resolver caches: ${domain} → ${ip}`,
+            logType: 'info',
+            domain: domain,
+            ip: ip
+        });
+        
+        // Step 10: Resolver returns IP to browser
+        steps.push({
+            action: 'resolver-to-browser',
+            description: `Resolver returns IP address to browser: ${ip}`,
+            elements: ['resolver', 'browser'],
+            logMessage: `Resolver to browser: "${domain} resolves to ${ip}"`,
+            logType: 'response',
+            ip: ip
+        });
+        
+        // Step 11: Browser initiates HTTP request
+        steps.push({
+            action: 'browser-to-webserver',
+            description: `Browser initiates HTTP request to ${ip}`,
+            elements: ['browser', 'webserver'],
+            logMessage: `Browser sends HTTP request to ${ip}`,
+            logType: 'request'
+        });
+        
+        // Step 12: Web server responds
+        steps.push({
+            action: 'webserver-response',
+            description: `Web server responds with HTTP content`,
+            elements: ['webserver', 'browser'],
+            logMessage: `Web server responds with HTTP content`,
+            logType: 'response'
+        });
+        
+        // Step 13: Browser renders page
+        steps.push({
+            action: 'browser-render',
+            description: `Browser renders the web page`,
+            elements: ['browser'],
+            logMessage: `Browser renders the web page from ${domain}`,
+            logType: 'info'
+        });
         
         return steps;
     }
@@ -371,8 +362,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Add some example domains to the UI
-    log('Welcome to DNS Resolution Simulator! Try resolving example.pt, google.pt, or dns.pt', 'info');
-    log('Or enter a custom domain to see how it would resolve', 'info');
+    log('Welcome to DNS Resolution Simulator! Try resolving any domain you want', 'info');
+    log('This simulator uses real DNS records from the internet', 'info');
     log('Start by entering a domain name and clicking "Resolve"', 'info');
     
     // Initialize resolver cache as empty
