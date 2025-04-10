@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualização em Árvore DNS e DNSSEC</title>
+    <link rel="stylesheet" href="tree-styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Simulador</a></li>
+                <li><a href="tree-view.html" class="active">Visualização em Árvore</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Visualização em Árvore DNS e DNSSEC</h1>
+        
+        <div class="input-section">
+            <input type="text" id="domain-input" placeholder="Digite um domínio (ex., exemplo.pt)">
+            <button id="resolve-btn">Resolver</button>
+            <label class="toggle-container">
+                <input type="checkbox" id="dnssec-toggle" checked>
+                <span class="toggle-text">DNSSEC</span>
+            </label>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="tree-tab">Árvore DNS</button>
+            <button class="tab-btn" data-tab="dnssec-tab">DNSSEC</button>
+            <button class="tab-btn" data-tab="details-tab">Detalhes</button>
+        </div>
+
+        <div class="tab-content">
+            <div id="tree-tab" class="tab-pane active">
+                <div class="tree-container">
+                    <div id="dns-tree"></div>
+                </div>
+            </div>
+
+            <div id="dnssec-tab" class="tab-pane">
+                <div class="dnssec-container">
+                    <h2>Componentes DNSSEC</h2>
+                    <div class="dnssec-components">
+                        <div class="dnssec-component" id="dnskey">
+                            <h3>DNSKEY</h3>
+                            <p>Chaves públicas utilizadas para verificar as assinaturas DNSSEC. Cada zona DNS tem pelo menos uma KSK (Key Signing Key) e uma ZSK (Zone Signing Key).</p>
+                            <div class="component-status"></div>
+                        </div>
+                        
+                        <div class="dnssec-component" id="ds">
+                            <h3>DS (Delegation Signer)</h3>
+                            <p>Cria a cadeia de confiança entre a zona pai e a zona filho. Contém um hash da chave KSK da zona filho.</p>
+                            <div class="component-status"></div>
+                        </div>
+                        
+                        <div class="dnssec-component" id="rrsig">
+                            <h3>RRSIG</h3>
+                            <p>Assinatura digital que valida a autenticidade dos registros DNS. Cada conjunto de registros possui sua própria assinatura.</p>
+                            <div class="component-status"></div>
+                        </div>
+                        
+                        <div class="dnssec-component" id="nsec">
+                            <h3>NSEC/NSEC3</h3>
+                            <p>Prova de não-existência. Permite confirmar que um nome de domínio ou tipo de registro realmente não existe.</p>
+                            <div class="component-status"></div>
+                        </div>
+
+                        <div class="dnssec-component" id="cds">
+                            <h3>CDS/CDNSKEY</h3>
+                            <p>Registros para automatizar a manutenção da cadeia de confiança. Permite que a zona filho sinalize alterações de chave para a zona pai.</p>
+                            <div class="component-status"></div>
+                        </div>
+                    </div>
+
+                    <div id="dnssec-visual"></div>
+                </div>
+            </div>
+
+            <div id="details-tab" class="tab-pane">
+                <div class="details-container">
+                    <h2>Detalhes da Resolução</h2>
+                    <div id="resolution-details"></div>
+                    
+                    <h3>Informações Adicionais</h3>
+                    <div class="additional-info">
+                        <div class="info-section">
+                            <h4>Hierarquia DNS</h4>
+                            <p>O DNS é organizado hierarquicamente, começando pelos servidores raiz, seguidos pelos servidores TLD (Top-Level Domain), e finalmente os servidores autoritativos para cada domínio.</p>
+                        </div>
+                        
+                        <div class="info-section">
+                            <h4>DNSSEC - Segurança de DNS</h4>
+                            <p>O DNSSEC fornece autenticação e integridade para os dados DNS através de assinaturas digitais, criando uma cadeia de confiança desde a raiz até os domínios individuais.</p>
+                            <p>Principais componentes:</p>
+                            <ul>
+                                <li><strong>DNSKEY:</strong> Chaves públicas usadas para verificar assinaturas</li>
+                                <li><strong>DS (Delegation Signer):</strong> Cria a cadeia de confiança entre zonas pai e filho</li>
+                                <li><strong>RRSIG:</strong> Assinaturas digitais que autenticam registros DNS</li>
+                                <li><strong>NSEC/NSEC3:</strong> Prova criptográfica da não-existência de registros</li>
+                                <li><strong>CDS/CDNSKEY:</strong> Registros para automatizar a manutenção da cadeia de confiança</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="info-section">
+                            <h4>Benefícios do DNSSEC</h4>
+                            <ul>
+                                <li>Proteção contra envenenamento de cache DNS</li>
+                                <li>Garantia da autenticidade das respostas DNS</li>
+                                <li>Base confiável para outros protocolos de segurança</li>
+                                <li>Verificação da inexistência de registros</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="reset-btn">Reiniciar</button>
+            <button id="step-btn">Avançar Passo</button>
+            <button id="auto-btn">Reprodução Automática</button>
+        </div>
+    </div>
+    
+    <div id="detail-tooltip" class="tooltip"></div>
+
+    <script src="tree-script.js"></script>
+</body>
+</html>
